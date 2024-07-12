@@ -1,0 +1,54 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:FileExplorer.ViewModels"
+			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+			 xmlns:converters="clr-namespace:FileExplorer.Converters"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="FileExplorer.Views.MainView"
+             x:DataType="vm:MainViewModel">
+	<UserControl.Resources>
+		<converters:IconConverter x:Key="IconConverter"/>
+	</UserControl.Resources>
+	<DockPanel>
+		<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10">
+			<Button Content="⬅️ Back" Command="{Binding GoBackCommand}" Margin="0,0,10,0"/>
+			<TextBox Text="{Binding CurrentPath}" Width="300" Margin="0,0,10,0" Watermark="Root Path"/>
+		</StackPanel>
+
+		<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10">
+			<TextBox Watermark="Name Filter" Text="{Binding NameFilter}" Width="150" Margin="0,0,10,0"/>
+			<TextBox Watermark="Extension Filter" Text="{Binding ExtensionFilter}" Width="150" Margin="0,0,10,0"/>
+			<CheckBox Content="Hide Directories" IsChecked="{Binding HideDirectories}" Margin="0,0,10,0"/>
+			<CheckBox Content="Hide Files" IsChecked="{Binding HideFiles}"/>
+		</StackPanel>
+		
+		<TextBlock DockPanel.Dock="Top" Text="Double-click a directory to view its contents"
+               Margin="10" />
+		
+		<Grid ColumnDefinitions="*, *">
+			<ListBox Grid.Column="0" ItemsSource="{Binding Items}" Name="itemsListBox">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="{Binding IsDirectory, Converter={StaticResource IconConverter}}" 
+									   Margin="0,0,5,0"/>
+							<TextBlock Text="{Binding Name}"/>
+						</StackPanel>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+				<i:Interaction.Behaviors>
+					<ia:EventTriggerBehavior EventName="DoubleTapped">
+						<ia:InvokeCommandAction Command="{Binding ItemDoubleTappedCommand}"
+												CommandParameter="{Binding SelectedItem, ElementName=itemsListBox}"/>
+					</ia:EventTriggerBehavior>
+				</i:Interaction.Behaviors>
+			</ListBox>
+			<ListBox Grid.Column="1" ItemsSource="{Binding Logs}"/>
+			<TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Right" FontSize="10" Foreground="LightGray" 
+					   Text="Created by Mert Yagmur for EPAM" Margin="5" />
+		</Grid>
+	</DockPanel>
+</UserControl>
