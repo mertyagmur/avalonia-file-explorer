@@ -32,7 +32,7 @@ This is a simple and lightweight file system explorer built with Avalonia UI and
 - Run the application
 ## Screenshots
 
-![App Screenshot](/../<main>/screenshots/1.png?raw=true)
+![App Screenshot](/screenshots/1.png?raw=true)
 
 
 ## Usage/Examples
